@@ -16,7 +16,7 @@ public class Producto {
 
     private Double precio;
 
-    private Double descripcion;
+    private String descripcion;
 
     private List<String> tags;
 
@@ -47,11 +47,11 @@ public class Producto {
         this.precio = precio;
     }
 
-    public Double getDescripcion() {
+    public String getDescripcion() {
         return descripcion;
     }
 
-    public void setDescripcion(Double descripcion) {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 

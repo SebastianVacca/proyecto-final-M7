@@ -3,6 +3,8 @@ package com.devsenior.svacca.proyecto.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.devsenior.svacca.proyecto.exception.ProductNotFoundException;
 import com.devsenior.svacca.proyecto.exception.ProductoAlreadyExistException;
 import com.devsenior.svacca.proyecto.mapper.ProductoMapper;
@@ -10,6 +12,7 @@ import com.devsenior.svacca.proyecto.model.dto.ProductoRequest;
 import com.devsenior.svacca.proyecto.model.dto.ProductoResponse;
 import com.devsenior.svacca.proyecto.repository.ProductoRepository;
 
+@Service
 public class ProductoServiceImpl implements ProductoService{
     
     private final ProductoRepository productoRepository;
@@ -22,10 +25,21 @@ public class ProductoServiceImpl implements ProductoService{
 
     @Override
     public ProductoResponse guardarProducto(ProductoRequest producto) {
-        if (productoRepository.existsByName(producto.getNombre())){
+        if (productoRepository.existsByNombre(producto.getNombre())){
             throw new ProductoAlreadyExistException();
         }
 
+        var document = productoMapper.toDocument(producto);
+        document = productoRepository.save(document);
+
+        var response = productoMapper.toResponse(document);
+        return response;
+    }
+
+    @Override
+    public ProductoResponse actualizarProducto(ProductoRequest producto) {
+        if (!productoRepository.existsById(null))
+            throw new ProductNotFoundException();
         var document = productoMapper.toDocument(producto);
         document = productoRepository.save(document);
 
@@ -47,10 +61,29 @@ public class ProductoServiceImpl implements ProductoService{
             .orElseThrow(() -> new ProductNotFoundException());
     }
 
+     @Override
+    public List<ProductoResponse> obtenerPorNombre(String textoBUsqueda) {
+        return productoRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(textoBUsqueda, textoBUsqueda).stream()
+            .map(productoMapper::toResponse)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductoResponse> obtenerPorTag(String textoBUsqueda) {
+        return productoRepository.findByTagsContaining(textoBUsqueda).stream()
+            .map(productoMapper::toResponse)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductoResponse> obtenerPorEspecifiacion(String key, String value) {
+       return productoRepository.findByEspecificacionKeyAndValue(key, value).stream()
+        .map(productoMapper::toResponse)
+        .collect(Collectors.toList());
+    }
+
     @Override
     public void eliminarPorId(String id) {
         productoRepository.deleteById(id);
     }
-
-
 }

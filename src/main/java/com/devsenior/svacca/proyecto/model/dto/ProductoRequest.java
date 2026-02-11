@@ -6,17 +6,20 @@ import java.util.Map;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ProductoRequest {
     @NotBlank(message = "El nombre es requerido")
     private String nombre;
 
-    @NotBlank(message = "El precio es requerido")
+    @NotNull(message = "El precio es requerido")
     private Double precio;
 
-    private Double descripcion;
+    private String descripcion;
 
-    @NotBlank(message = "El tag del producto es requerido")
+    @NotNull
+    @Size(min = 1)
     private List<String> tags;
 
     @Field("especificaciones")
@@ -38,11 +41,11 @@ public class ProductoRequest {
         this.precio = precio;
     }
 
-    public Double getDescripcion() {
+    public String getDescripcion() {
         return descripcion;
     }
 
-    public void setDescripcion(Double descripcion) {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 

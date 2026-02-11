@@ -1,0 +1,47 @@
+###
+GET http://localhost:8080/api/productos
+
+###
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+    "nombre": "Laptop de prueba",
+    "precio": 1000,
+    "tags": ["Tecnología"],
+    "especificaciones": {
+        "ram": "16GB",
+        "cpu": "Ryzen 7"
+    }
+}
+
+###
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+    "nombre": "Libro de prueba",
+    "precio": 100,
+    "tags": ["Educación"],
+    "especificaciones": {
+        "autor": "Pombo",
+        "isbn": "123456789",
+        "editorial": "La de siempre"
+    }
+}
+
+###
+GET http://localhost:8080/api/productos/698bdfbbcb87fbbea8ae1128
+
+###
+GET http://localhost:8080/api/productos/buscar?param=Laptop
+
+###
+GET http://localhost:8080/api/productos/por-tag?param=Tecnología
+
+###
+GET http://localhost:8080/api/productos/especificacion?key=ram&value=16GB
+
+###
+DELETE http://localhost:8080/api/productos/698be34ecb87fbbea8ae112b
+
